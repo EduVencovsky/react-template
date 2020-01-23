@@ -1,14 +1,14 @@
 ﻿import React from "react";
 import PropTypes from 'prop-types'
 import t from 'ui-stack/lang'
-import { FastField, getIn } from "formik"
+import { Field, getIn } from "formik"
 import { KeyboardDateTimePicker as MUIKeyboardDateTimePicker } from "@material-ui/pickers"
 
 function isValidDate(d) {
-  return d instanceof Date && !isNaN(d);
+    return d instanceof Date && !isNaN(d);
 }
 
-const MaterialKeyboardDateTimePicker = React.memo(({
+const MaterialKeyboardDateTimePicker = ({
     field,
     form,
     showMessage,
@@ -21,10 +21,10 @@ const MaterialKeyboardDateTimePicker = React.memo(({
     anyError,
     ...otherProps
 }) => {
-    
+
     const { name, value } = field;
-    const { setFieldTouched, setFieldError, setFieldValue, touched, errors, isSubmitting } = form;   
-      
+    const { setFieldTouched, setFieldError, setFieldValue, touched, errors, isSubmitting } = form;
+
     const fieldError = getIn(errors, name);
     const showError = getIn(touched, name) && !!fieldError;
 
@@ -44,13 +44,10 @@ const MaterialKeyboardDateTimePicker = React.memo(({
 
     const format = "dd/MM/yyyy HH:mm"
     const invalidDate = invalidDateMessage || t('validation_string')
-    
+
     return (
         <MUIKeyboardDateTimePicker
-            autoOk       
-            size="small"
             name={name}
-            ampm={false}
             value={value}
             format={format}
             error={showError}
@@ -67,7 +64,7 @@ const MaterialKeyboardDateTimePicker = React.memo(({
             {...otherProps}
         />
     )
-})
+}
 
 MaterialKeyboardDateTimePicker.defaultProps = {
     ISOString: true,
@@ -84,7 +81,7 @@ MaterialKeyboardDateTimePicker.propTypes = {
     field: PropTypes.object.isRequired,
 }
 
-const KeyboardDateTimePicker = React.memo(props => <FastField {...props} component={MaterialKeyboardDateTimePicker} />)
+const KeyboardDateTimePicker = props => <Field {...props} component={MaterialKeyboardDateTimePicker} />
 
 KeyboardDateTimePicker.propTypes = {
     name: PropTypes.string.isRequired

@@ -4,7 +4,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
 import { Field, getIn } from 'formik'
 
-export const MaterialAutocomplete = React.memo(({
+export const MaterialAutocomplete = ({
     textFieldProps,
     field,
     form,
@@ -39,24 +39,24 @@ export const MaterialAutocomplete = React.memo(({
         <Autocomplete
             {...props}
             {...otherFieldProps}
-            name={name}                        
+            name={name}
             value={(valueKey ? options.find(x => x[valueKey] === value) : value) || ''}
             options={options}
             disabled={disabled != undefined ? disabled : isSubmitting}
-            onChange={handleChange}      
+            onChange={handleChange}
             onBlur={() => setFieldTouched(name, true)}
             renderInput={props => (
                 <TextField
                     {...props}
                     {...textFieldProps}
-                    size="small"
+
                     error={showError}
                     helperText={showMessage ? (showError ? fieldError : helperText) : undefined}
                 />
             )}
         />
     );
-})
+}
 
 MaterialAutocomplete.defaultProps = {
     showMessage: false,
@@ -77,7 +77,7 @@ MaterialAutocomplete.propTypes = {
     field: PropTypes.object.isRequired,
 }
 
-const MUIFormikAutocomplete = React.memo(props => <Field {...props} component={MaterialAutocomplete} />)
+const MUIFormikAutocomplete = props => <Field {...props} component={MaterialAutocomplete} />
 
 MUIFormikAutocomplete.propTypes = {
     name: PropTypes.string.isRequired

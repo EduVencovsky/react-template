@@ -1,14 +1,14 @@
 ﻿import React from "react";
 import PropTypes from 'prop-types'
 import t from 'ui-stack/lang'
-import { FastField, getIn } from "formik"
+import { Field, getIn } from "formik"
 import { KeyboardDatePicker as MUIKeyboardDatePicker } from "@material-ui/pickers"
 
 function isValidDate(d) {
-  return d instanceof Date && !isNaN(d);
+    return d instanceof Date && !isNaN(d);
 }
 
-const MaterialKeyboardDatePicker = React.memo(({
+const MaterialKeyboardDatePicker = ({
     field,
     form,
     showMessage,
@@ -21,10 +21,10 @@ const MaterialKeyboardDatePicker = React.memo(({
     anyError,
     ...otherProps
 }) => {
-    
+
     const { name, value } = field;
     const { setFieldTouched, setFieldError, setFieldValue, touched, errors, isSubmitting } = form
-      
+
     const fieldError = getIn(errors, name)
     const showError = getIn(touched, name) && !!fieldError
 
@@ -47,8 +47,6 @@ const MaterialKeyboardDatePicker = React.memo(({
 
     return (
         <MUIKeyboardDatePicker
-            autoOk            
-            size="small"
             name={name}
             value={value}
             format={format}
@@ -66,7 +64,7 @@ const MaterialKeyboardDatePicker = React.memo(({
             {...otherProps}
         />
     )
-})
+}
 
 MaterialKeyboardDatePicker.defaultProps = {
     ISOString: true,
@@ -83,7 +81,7 @@ MaterialKeyboardDatePicker.propTypes = {
     field: PropTypes.object.isRequired,
 }
 
-const KeyboardDatePicker = React.memo(props => <FastField {...props} component={MaterialKeyboardDatePicker} />)
+const KeyboardDatePicker = props => <Field {...props} component={MaterialKeyboardDatePicker} />
 
 KeyboardDatePicker.propTypes = {
     name: PropTypes.string.isRequired

@@ -1,9 +1,9 @@
 ﻿import React from 'react'
-import { FastField, getIn } from 'formik'
+import { Field, getIn } from 'formik'
 import FormHelperText from '@material-ui/core/FormHelperText'
 
-const ErrorMessage = React.memo(({ name, props }) => (
-    <FastField
+const ErrorMessage = ({ name, props }) => (
+    <Field
         name={name}
     >
         {({ form }) => {
@@ -19,7 +19,7 @@ const ErrorMessage = React.memo(({ name, props }) => (
                 :
                 null
         }}
-    </FastField>
-))
+    </Field>
+)
 
 export default ErrorMessage

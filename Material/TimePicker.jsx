@@ -5,10 +5,10 @@ import { Field, getIn } from "formik"
 import { KeyboardTimePicker as MUIKeyboardTimePicker } from "@material-ui/pickers"
 
 function isValidDate(d) {
-  return d instanceof Date && !isNaN(d);
+    return d instanceof Date && !isNaN(d);
 }
 
-const MaterialKeyboardTimePicker = React.memo(({
+const MaterialKeyboardTimePicker = ({
     field,
     form,
     showMessage,
@@ -21,10 +21,10 @@ const MaterialKeyboardTimePicker = React.memo(({
     anyError,
     ...otherProps
 }) => {
-    
+
     const { name, value } = field;
-    const { setFieldTouched, setFieldError, setFieldValue, touched, errors, isSubmitting } = form;   
-      
+    const { setFieldTouched, setFieldError, setFieldValue, touched, errors, isSubmitting } = form;
+
     const fieldError = getIn(errors, name);
     const showError = getIn(touched, name) && !!fieldError;
 
@@ -45,9 +45,6 @@ const MaterialKeyboardTimePicker = React.memo(({
 
     return (
         <MUIKeyboardTimePicker
-            autoOk
-            size="small"
-            ampm={false}
             name={name}
             value={value}
             error={showError}
@@ -64,7 +61,7 @@ const MaterialKeyboardTimePicker = React.memo(({
             {...otherProps}
         />
     )
-})
+}
 
 MaterialKeyboardTimePicker.defaultProps = {
     ISOString: true,
@@ -81,7 +78,7 @@ MaterialKeyboardTimePicker.propTypes = {
     field: PropTypes.object.isRequired,
 }
 
-const KeyboardTimePicker = React.memo(props => <Field {...props} component={MaterialKeyboardTimePicker} />)
+const KeyboardTimePicker = props => <Field {...props} component={MaterialKeyboardTimePicker} />
 
 KeyboardTimePicker.propTypes = {
     name: PropTypes.string.isRequired

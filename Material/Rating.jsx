@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Rating from '@material-ui/lab/Rating'
-import { useFormikContext } from 'formik'
 
-function RatingFormik({ name, updateOnHover, ...otherProps }) {
-    const { setFieldValue, values } = useFormikContext()
-    const [rating, setRating] = useState(values[name])
+export const MaterialRating = ({
+    field,
+    form,
+    updateOnHover,
+    ...otherProps
+}) => {
+    const { name, value, ...otherFieldProps } = field
+    const { isSubmitting, setFieldValue } = form
+
+    const [rating, setRating] = useState(value)
     const [hoverRating, setHoverRating] = useState(-1)
 
     useEffect(() => {
@@ -19,20 +25,30 @@ function RatingFormik({ name, updateOnHover, ...otherProps }) {
         <Rating
             name={name}
             value={rating}
+            disabled={disabled != undefined ? disabled : isSubmitting}
             onChange={(e, value) => setRating(value)}
             onChangeActive={(e, newHover) => setHoverRating(newHover)}
             {...otherProps}
+            {...otherFieldProps}
         />
     )
 }
 
-RatingFormik.defaultProps = {
+MaterialRating.defaultProps = {
     updateOnHover: false,
 }
 
-RatingFormik.propTypes = {
-    name: PropTypes.string.isRequired,
+MaterialRating.propTypes = {
     updateOnHover: PropTypes.bool,
+    disabled: PropTypes.bool,
+    form: PropTypes.object.isRequired,
+    field: PropTypes.object.isRequired,
 }
 
-export default RatingFormik
+const MUIFormikRating = props => <Field {...props} component={MaterialRating} />
+
+MUIFormikRating.propTypes = {
+    name: PropTypes.string.isRequired
+}
+
+export default MUIFormikRating
