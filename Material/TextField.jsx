@@ -1,7 +1,7 @@
 ﻿import React from 'react'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField';
-import { Field, getIn } from 'formik'
+import { Field, FastField, getIn } from 'formik'
 
 export const MaterialTextField = ({
     field,
@@ -48,5 +48,7 @@ const MUIFormikTextField = props => <Field {...props} component={MaterialTextFie
 MUIFormikTextField.propTypes = {
     name: PropTypes.string.isRequired
 }
+
+export const FastTextField = props => <FastField {...props} component={MaterialTextField} />
 
 export default MUIFormikTextField
