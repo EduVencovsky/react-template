@@ -45,9 +45,16 @@ function CustomPopover({
     const elementVertical = addVerticalName([elementBottom, elementCenter, elementTop]).find(x => x.value) || defaultPosition
     const elementHorizontal = addHorizontalName([elementLeft, elementMiddle, elementRight]).find(x => x.value) || defaultPosition
 
-    const wrapperStyle = padding ?
-        { style: { padding: typeof padding === 'number' ? padding + 'px' : '5px' } } :
-        {}
+    const customContainerProps = {
+        ...containerProps,
+        style: {
+            ...(containerProps.style || {}),
+            ...(!!padding ?
+                { padding: typeof padding === 'number' ? padding + 'px' : '5px' } :
+                {}
+            )
+        }
+    }
 
     return (
         <Popover
@@ -64,7 +71,7 @@ function CustomPopover({
             }}
             {...otherProps}
         >
-            <div {...containerProps} {...wrapperStyle}>
+            <div {...customContainerProps}>
                 {children}
             </div>
         </Popover>
@@ -73,6 +80,7 @@ function CustomPopover({
 
 CustomPopover.defaultProps = {
     style: {},
+    containerProps: {},
     padding: true,
 }
 
