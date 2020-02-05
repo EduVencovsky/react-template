@@ -16,7 +16,7 @@ const addHorizontalName = ([left, middle, right]) => [
 
 const defaultPosition = { name: 'center' }
 
-function InfoPopover({
+function CustomPopover({
     style,
     isOpen,
     onClose,
@@ -35,6 +35,7 @@ function InfoPopover({
     elementMiddle,
     elementRight,
     children,
+    containerProps,
     ...otherProps
 }) {
 
@@ -44,12 +45,15 @@ function InfoPopover({
     const elementVertical = addVerticalName([elementBottom, elementCenter, elementTop]).find(x => x.value) || defaultPosition
     const elementHorizontal = addHorizontalName([elementLeft, elementMiddle, elementRight]).find(x => x.value) || defaultPosition
 
+    const wrapperStyle = padding ?
+        { style: { padding: typeof padding === 'number' ? padding + 'px' : '5px' } } :
+        {}
+
     return (
         <Popover
             open={isOpen}
             anchorEl={elementRef && elementRef.current}
             onClose={onClose}
-            style={{ ...style, padding: padding ? '5px' : style.padding }}
             anchorOrigin={{
                 vertical: anchorVertical.name,
                 horizontal: anchorHorizontal.name,
@@ -60,12 +64,14 @@ function InfoPopover({
             }}
             {...otherProps}
         >
-            {children}
+            <div {...containerProps} {...wrapperStyle}>
+                {children}
+            </div>
         </Popover>
     )
 }
 
-InfoPopover.defaultProps = {
+CustomPopover.defaultProps = {
     style: {},
     padding: true,
 }
@@ -82,9 +88,10 @@ const testPositionProps = (prefix, suffixArray) => props => {
     }
 }
 
-InfoPopover.propTypes = {
+CustomPopover.propTypes = {
     style: PropTypes.object,
-    padding: PropTypes.bool,
+    containerProps: PropTypes.object,
+    padding: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
     onClose: PropTypes.func,
     elementRef: PropTypes.object,
     children: PropTypes.node,
@@ -102,4 +109,4 @@ InfoPopover.propTypes = {
     elementRight: testHorizontalProps('element'),
 }
 
-export default InfoPopover
+export default CustomPopover
