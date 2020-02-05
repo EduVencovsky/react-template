@@ -1,43 +1,91 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Radio from '@material-ui/core/Radio'
+import FormLabel from '@material-ui/core/FormLabel'
 import RadioGroup from '@material-ui/core/RadioGroup'
+import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { Field } from 'formik'
+import { Field, getIn } from 'formik'
 
-const MaterialRadioGroup = ({ formik, name, options, children, label, ...otherProps }) => (
-    <RadioGroup
-        aria-label={label}
-        name={name}
-        value={formik.values[name]}
-        onChange={formik.handleChange(name)}
-        {...otherProps}
-    >
-        {children ? children : options.map(({ value, ...otherProps }) => (
-            <FormControlLabel
-                key={value}
+export const MaterialRadioGroup = ({
+    form,
+    field,
+    label,
+    options,
+    disabled,
+    valueKey,
+    labelKey,
+    onChange,
+    radioProps,
+    helperText,
+    showMessage,
+    horizontal,
+    ...otherProps,
+}) => {
+    const { name, value } = field;
+    const { touched, errors, isSubmitting, setFieldValue } = form;
+
+    const fieldError = getIn(errors, name)
+    const showError = getIn(touched, name) && !!fieldError
+
+    const handleOnChange = e => {
+        setFieldValue(name, e.target.value)
+        if (onChange && typeof onChange === 'function') {
+            onChange(e)
+        }
+    }
+
+    return (
+        <FormControl
+            component="fieldset"
+            error={showError}
+            disabled={disabled != undefined ? disabled : isSubmitting}
+            {...otherProps}
+        >
+            {label && <FormLabel>{label}</FormLabel>}
+            <RadioGroup
+                name={name}
                 value={value}
-                control={<Radio color="primary" />}
-                {...otherProps}
-            />
-        ))}
-    </RadioGroup>
-)
+                row={horizontal}
+                onChange={handleOnChange}
+            >
+                {options.map(item => (
+                    <FormControlLabel
+                        key={`${item[labelKey]}_${item[valueKey]}`}
+                        value={item[valueKey]}
+                        label={item[labelKey]}
+                        control={<Radio {...radioProps} />}
+                    />
+                ))}
+            </RadioGroup>
+            {showMessage && (
+                <FormHelperText>
+                    {showError ? fieldError : helperText}
+                </FormHelperText>
+            )}
+        </FormControl>
+    )
+}
+
+MaterialRadioGroup.defaultProps = {
+    valueKey: 'value',
+    labelKey: 'label',
+    showMessage: false,
+    horizontal: false,
+    radioProps: {},
+}
 
 MaterialRadioGroup.propTypes = {
-    label: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    formik: PropTypes.object.isRequired,
-    children: (props, propName, componentName) => {
-        if (!props.options && !props.children) {
-            return new Error(`The 'options' or 'data' prop should be specified in '${componentName}'.`);
-        }
-    },
-    options: (props, propName, componentName) => {
-        if (!props.options && !props.children) {
-            return new Error(`The 'options' or 'data' prop should be specified in '${componentName}'.`);
-        }
-    },
+    disabled: PropTypes.bool,
+    showMessage: PropTypes.bool,
+    valueKey: PropTypes.string,
+    labelKey: PropTypes.string,
+    helperText: PropTypes.string,
+    radioProps: PropTypes.object,
+    form: PropTypes.object.isRequired,
+    field: PropTypes.object.isRequired,
+    options: PropTypes.array.isRequired,
 }
 
 const MUIFormikRadioGroup = props => <Field {...props} component={MaterialRadioGroup} />
