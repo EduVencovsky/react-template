@@ -11,6 +11,7 @@ export const MaterialCheckBox = ({ field, form, disabled, ...props }) => {
         <FormControlLabel
             {...field}
             {...props}
+            checked={field.value}
             disabled={disabled != undefined ? disabled : isSubmitting}
             control={<Checkbox />}
         />
