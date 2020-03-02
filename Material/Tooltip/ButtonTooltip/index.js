@@ -15,7 +15,7 @@ function ButtonTooltip({ children, ...otherProps }) {
     )
 }
 
-Tooltip.defaultProps = {
+ButtonTooltip.defaultProps = {
     arrow: true,
 }
 
