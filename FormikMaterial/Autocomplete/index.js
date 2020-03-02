@@ -1,9 +1,10 @@
-﻿import React, { useEffect, useMemo } from 'react'
+﻿import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Chip from '@material-ui/core/Chip'
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { Field, getIn } from 'formik'
+import useDependentField from '../../Formik/Hooks/useDependentField'
 
 export const MaterialAutocomplete = React.memo(({
     form,
@@ -26,19 +27,12 @@ export const MaterialAutocomplete = React.memo(({
     ...otherProps
 }) => {
     const { name, value, ...otherFieldProps } = field
-    const { setFieldTouched, setFieldValue, touched, errors, values, isSubmitting } = form
+    const { setFieldTouched, setFieldValue, touched, errors, isSubmitting } = form
 
     const fieldError = getIn(errors, name)
     const showError = getIn(touched, name) && !!fieldError
 
-    // // Used for autocomplete chain
-    // // Change field value when other field value change
-    const fieldValue = getIn(values, dependentField)
-    useEffect(() => {
-        if (dependentField) {
-            setFieldValue(name, dependentFieldValue)
-        }
-    }, [fieldValue])
+    useDependentField(name, dependentField, dependentFieldValue)
 
     const handleChange = (e, newValue) => {
         // Use valueKey

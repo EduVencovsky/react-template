@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+﻿import React, { useState, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
@@ -14,8 +14,8 @@ function ButtonList({
     menuItemProps,
     valueKey,
     textKey,
-    ButtonComponent,
-    ItemComponent,
+    ButtonComponent = Button,
+    ItemComponent = MenuItem,
     ...otherProps
 }) {
     const [anchorEl, setAnchorEl] = useState(null)
@@ -68,10 +68,8 @@ function ButtonList({
 }
 
 ButtonList.defaultProps = {
-    textKey: 'text',
     valueKey: 'value',
-    ItemComponent: MenuItem,
-    ButtonComponent: Button,
+    textKey: 'text',
 }
 
 ButtonList.propTypes = {
