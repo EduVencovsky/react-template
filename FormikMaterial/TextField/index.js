@@ -19,13 +19,14 @@ export const MaterialTextField = ({
     const fieldError = getIn(errors, name)
     const showError = getIn(touched, name) && !!fieldError
 
-    const handleChange = value => {
-
+    const handleChange = e => {
+        const newValue = e.target.value
+        
         if (onChange && typeof onChange === 'function') {
-            onChange(value)
+            onChange(newValue)
         }
         if (!manually) {
-            setFieldValue(name, value, false)
+            setFieldValue(name, newValue, false)
         }
 
     }
