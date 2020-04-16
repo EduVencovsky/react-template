@@ -1,14 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 
-function ButtonList({ onSelect,
+function ButtonList({
+    onSelect,
     onClick,
     onClose,
     options,
     children,
     menuProps,
     menuItemProps,
+    valueKey,
+    textKey,
+    ButtonComponent,
+    ItemComponent,
     ...otherProps
 }) {
     const [anchorEl, setAnchorEl] = useState(null)
@@ -35,10 +42,10 @@ function ButtonList({ onSelect,
     }
 
     return (
-        <>
-            <Button aria-haspopup="true" onClick={handleClick} {...otherProps}>
+        <Fragment>
+            <ButtonComponent aria-haspopup='true' onClick={handleClick} {...otherProps}>
                 {children}
-            </Button>
+            </ButtonComponent>
             <Menu
                 keepMounted
                 open={!!anchorEl}
@@ -46,22 +53,43 @@ function ButtonList({ onSelect,
                 onClose={handleClose}
                 {...menuProps}
             >
-                {options.map(option =>
-                    <MenuItem key={`${option.value}`} onClick={e => handleClickMenuItem(e, option.value)}>{option.text}</MenuItem>
+                {options && options.map((option, i) =>
+                    <ItemComponent
+                        key={`${option[valueKey]}_${option[textKey]}_${i}`}
+                        onClick={e => handleClickMenuItem(e, option[valueKey])}
+                        {...menuItemProps}
+                    >
+                        {option[textKey]}
+                    </ItemComponent>
                 )}
             </Menu>
-        </>
+        </Fragment>
     )
 }
 
+ButtonList.defaultProps = {
+    textKey: 'text',
+    valueKey: 'value',
+    ItemComponent: MenuItem,
+    ButtonComponent: Button,
+}
+
 ButtonList.propTypes = {
-    children: PropTypes.node,
     onClick: PropTypes.func,
     onClose: PropTypes.func,
-    onSelect: PropTypes.func.isRequired,
+    children: PropTypes.node,
+    textKey: PropTypes.string,
+    valueKey: PropTypes.string,
     menuProps: PropTypes.object,
     menuItemProps: PropTypes.object,
-    options: PropTypes.arrayOf(PropTypes.object).isRequired,
+    // ItemComponent: PropTypes.elementType,
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            text: PropTypes.string,
+            value: PropTypes.any
+        })
+    ).isRequired,
+    onSelect: PropTypes.func.isRequired,
 }
 
 export default ButtonList
