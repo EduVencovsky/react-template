@@ -9,19 +9,33 @@ export const MaterialTextField = ({
     disabled,
     showMessage,
     helperText,
+    onChange,
+    manually,
     ...props,
 }) => {
     const { name, value, ...otherFieldProps } = field
-    const { touched, errors, isSubmitting } = form
+    const { touched, errors, isSubmitting, setFieldValue } = form
 
     const fieldError = getIn(errors, name)
     const showError = getIn(touched, name) && !!fieldError
+
+    const handleChange = value => {
+
+        if (onChange && typeof onChange === 'function') {
+            onChange(value)
+        }
+        if (!manually) {
+            setFieldValue(name, value, false)
+        }
+
+    }
 
     return (
         <TextField
             {...props}
             {...field}
             {...otherFieldProps}
+            onChange={handleChange}
             name={name}
             value={value === null ? '' : value} // allow null values
             disabled={disabled != undefined ? disabled : isSubmitting}
