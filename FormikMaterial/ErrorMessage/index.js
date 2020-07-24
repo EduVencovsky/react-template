@@ -1,4 +1,5 @@
 ﻿import React from 'react'
+import PropTypes from 'prop-types'
 import { Field, getIn } from 'formik'
 import FormHelperText from '@material-ui/core/FormHelperText'
 
@@ -21,5 +22,9 @@ const ErrorMessage = ({ name, props }) => (
         }}
     </Field>
 )
+
+ErrorMessage.propTypes = {
+    name: PropTypes.string.isRequired,
+}
 
 export default ErrorMessage

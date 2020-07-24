@@ -17,7 +17,6 @@ const addHorizontalName = ([left, middle, right]) => [
 const defaultPosition = { name: 'center' }
 
 function CustomPopover({
-    style,
     isOpen,
     onClose,
     padding,
@@ -103,6 +102,7 @@ CustomPopover.propTypes = {
     onClose: PropTypes.func,
     elementRef: PropTypes.object,
     children: PropTypes.node,
+    isOpen: PropTypes.bool,
     anchorBottom: testVerticalProps('anchor'),
     anchorCenter: testVerticalProps('anchor'),
     anchorTop: testVerticalProps('anchor'),
